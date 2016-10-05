@@ -25,10 +25,11 @@
 
 Pcre::Pcre( const std::string& expression, char *flags )
 {
+	FLAG = 0;
 	Zero();
 	_expression = expression;
 	FLAG = GetFlags( flags );
-	Compile( GetFlags( flags ) );
+	Compile( FLAG );
 }
 
 const Pcre& Pcre::operator = ( const std::string& expression )
@@ -180,7 +181,10 @@ char *Pcre::Replace( std::string Str, std::string Then, std::string That, std::s
 
 UINT Pcre::GetFlags( char *flags )
 {
-	FLAG = 0;
+	int result = 0;
+
+	if( !flags )
+		return 0;
 
 	int flaglen = strlen( flags );
 
@@ -195,7 +199,7 @@ UINT Pcre::GetFlags( char *flags )
 			case 'u': FLAG |= PCRE2_UTF | PCRE2_UCP;			break;		// Treat pattern and subjects as UTF strings
 		}
 	}
-	return FLAG;
+	return result;
 }
 
 //////////////////////////////////////////////////////////////////////////
